@@ -1,0 +1,378 @@
+meta:
+  engine: 4.1.0
+units:
+  Mx: 14  #mounting hole width
+  My: 14  #mountign hole height
+  Sx: U   #X spacing
+  Sy: U   #Y spacing
+  Kx: Sx-1.05  #keycap width
+  Ky: Sy-1.05  #Keycap height
+  Pb: 3   #PCB buffer
+  bx: 0.5Sx + Pb
+  by: 0.5Sy + Pb
+
+points:
+  zones:
+    matrix:
+      anchor:
+        shift: [0, 0]
+        # shift: [122, -100]
+      key:
+        spread: Sx
+        padding: Sy
+        width: Kx
+        height: Ky
+      columns:
+        outer:
+          key:
+            col_net: G4
+          rows:
+            mod.skip: true
+        pinky:
+          key:
+            col_net: G5
+          rows:
+            mod.skip: true
+        ring:
+          key:
+            stagger: 9
+            col_net: G6
+          rows:
+            mod.col_net: G5
+        middle:
+          key:
+            stagger: 2.5
+            col_net: G27
+          rows:
+            mod.col_net: G6
+        index:
+          key:
+            stagger: -2.5
+            col_net: G26
+          rows:
+            mod.col_net: G27
+        inner:
+          key:
+            stagger: -2.5
+            col_net: G18
+          rows:
+            mod.skip: true
+      rows:
+        mod:
+          row_net: G10
+          mirror.row_net: G9
+        bottom:
+          row_net: G19
+          mirror.row_net: G8
+        home:
+          row_net: G20
+          mirror.row_net: G7
+        top:
+          row_net: G28
+          mirror.row_net: G3
+        num:
+          row_net: G29
+          mirror.row_net: G2
+    thumbfan:
+      anchor:
+        ref: matrix_inner_mod
+        shift: [3, -2.25]
+      key:
+        spread: Sx
+        padding: Sy
+        width: Kx
+        height: Ky
+      columns:
+        select:
+          key:
+            splay: -23
+            col_net: G26
+        space:
+          key:
+            spread: 21.2
+            stagger: 3.5
+            splay: 83
+            width: 1.5Kx
+            col_net: G18
+      rows:
+        fan:
+          row_net: G10
+          mirror.row_net: G9
+  rotate: -25
+  mirror:
+    ref: matrix_inner_num
+    distance: 3U
+
+outlines:
+  keys:
+    - what: rectangle
+      where: true
+      asym: both
+      size: [Kx, Ky]
+    - what: rectangle
+      where: thumbfan_space_fan
+      asym: both
+      size: [1.5Kx, Ky]
+  key_holes:
+    - what: rectangle
+      where: true
+      size: [Mx, My]
+  basic:
+    - what: polygon
+      operation: stack
+      points:
+        - ref: matrix_outer_num
+          shift: [-bx, by]
+        - ref: matrix_outer_bottom
+          shift: [-bx, -by]
+        - ref: matrix_ring_mod
+          shift: [-bx, -by]
+        - ref: thumbfan_select_fan
+          shift: [-bx+3, -by]
+        - ref: thumbfan_select_fan
+          shift: [bx, -by]
+        - ref: thumbfan_space_fan
+          shift: [-bx-4, -by]
+        - ref: thumbfan_space_fan
+          shift: [bx, -by]
+        - ref: mirror_thumbfan_space_fan
+          shift: [bx, -by]
+        - ref: mirror_thumbfan_space_fan
+          shift: [-bx-4, -by]
+        - ref: mirror_thumbfan_select_fan
+          shift: [bx, -by]
+        - ref: mirror_thumbfan_select_fan
+          shift: [-bx+3,-by]
+        - ref: mirror_matrix_ring_mod
+          shift: [-bx, -by]       
+        - ref: mirror_matrix_outer_bottom
+          shift: [-bx, -by]          
+        - ref: mirror_matrix_outer_num
+          shift: [-bx, by]
+        - ref: mirror_matrix_ring_num
+          shift: [-bx, by]   
+        - ref: mirror_matrix_middle_num
+          shift: [-bx, by]                    
+        - ref: mirror_matrix_middle_num
+          shift: [bx, by]
+        - ref: mirror_matrix_inner_num
+          shift: [bx, by]
+        - ref: mirror_matrix_inner_top
+          shift: [bx, by]
+        - ref: matrix_inner_top
+          shift: [bx, by]
+        - ref: matrix_inner_num
+          shift: [bx, by]
+        - ref: matrix_middle_num
+          shift: [bx, by]
+        - ref: matrix_middle_num
+          shift: [-bx, by]
+        - ref: matrix_ring_num
+          shift: [-bx, by]
+      fillet: 3
+  preview:
+    - what: outline
+      name: basic
+    - what: outline
+      name: keys
+      operation: stack
+  mounting_plate:
+    - what: outline
+      name: basic
+    - what: outline
+      name: key_holes
+      operation: subtract
+
+pcbs:
+  mx:
+    template: kicad8
+    outlines:
+      - outline: basic
+        layer: Edge.Cuts
+    footprints:
+      keys:
+        what: switch_mx
+        where: true
+        params:
+          from: "{{col_net}}"
+          to: "{{colrow}}"
+          side: B
+          reversible: false
+          hotswap: true
+          solder: false
+          include_plated_holes: false
+          include_stabilizer_nets: false
+          include_centerhole_net: false
+          outer_pad_width_front: 2.6
+          outer_pad_width_back: 2.6
+          outer_pad_height: 2.5
+          stabilizers_diameter: 1.9
+          include_keycap: false
+          keycap_width: Kx
+          keycap_height: Ky 
+          include_corner_marks: true
+          include_silkscreen: true
+          switch_3dmodel_filename: ''
+          switch_3dmodel_xyz_offset: [0, 0, 0]
+          switch_3dmodel_xyz_scale: [1, 1, 1]
+          switch_3dmodel_xyz_rotation: [0, 0, 0]
+          hotswap_3dmodel_filename: ''
+          hotswap_3dmodel_xyz_offset: [0, 0, 0]
+          hotswap_3dmodel_xyz_scale: [1, 1, 1]
+          hotswap_3dmodel_xyz_rotation: [0, 0, 0]
+          keycap_3dmodel_filename: ''
+          keycap_3dmodel_xyz_offset: [0, 0, 0]
+          keycap_3dmodel_xyz_scale: [1, 1, 1]
+          keycap_3dmodel_xyz_rotation: [0, 0, 0]
+      diodes:
+        what: diode_tht_sod123
+        where: true
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          side: B
+          reversible: false
+          include_thru_hole_smd_pads: false
+          include_traces_vias: false
+          trace_distance: 1.2
+          trace_width: 0.25
+          via_size: 0.8
+          via_drill: 0.4
+          include_tht: false
+          diode_3dmodel_filename: ''
+          diode_3dmodel_xyz_offset: [0, 0, 0]
+          diode_3dmodel_xyz_scale: [1, 1, 1]
+          diode_3dmodel_xyz_rotation: [0, 0, 0]
+        adjust:
+          shift: [8.275, -0.5]
+          rotate: 90
+          resist: true
+      mcu:
+        what: mcu_rp2040
+        where:
+          ref.aggregate.parts: [matrix_inner_home, mirror_matrix_inner_home]
+          shift: [0, 0.095]
+          rotate: 0
+        params:
+          side: F
+          reversible: false
+          reverse_mount: true
+          include_traces: true
+          include_extra_pins: false
+          only_required_jumpers: false
+          use_rectangular_jumpers: false
+          via_size: 0.8
+          via_drill: 0.4
+          mcu_3dmodel_filename: ''
+          mcu_3dmodel_xyz_offset: [0, 0, 0]
+          mcu_3dmodel_xyz_scale: [1, 1, 1]
+          mcu_3dmodel_xyz_rotation: [0, 0, 0]
+      reset_button:
+        what: reset_switch_tht_top
+        where:
+          ref.aggregate.parts: [matrix_inner_home, mirror_matrix_inner_home]
+          shift: [0, -20]
+          rotate: 180
+        params:
+          side: F
+          reversible: false
+          include_silkscreen: true
+          from: GND
+          to: RST
+      vias:
+        what: via
+        where: true
+        asym: both
+        params:
+          net: "{{row_net}}"
+        adjust:
+          shift: [8.275, -4]
+          resist: true
+      via_inner:
+        what: via
+        where: 
+          ref: matrix_inner_home
+        params:
+          net: "{{col_net}}"
+        adjust:
+          shift: [-7.085, 0.5Sy+1]
+      via_index:
+        what: via
+        where: 
+          ref: matrix_index_home
+        params:
+          net: "{{col_net}}"
+        adjust:
+          shift: [-7.085, 0.5Sy+1]
+      via_middle:
+        what: via
+        where: 
+          ref: matrix_middle_home
+        params:
+          net: "{{col_net}}"
+        adjust:
+          shift: [-7.085, 0.5Sy+1]
+      via_ring:
+        what: via
+        where: 
+          ref: mirror_matrix_ring_home
+        params:
+          net: "{{col_net}}"
+        adjust:
+          shift: [7.085, 0.5Sy+1]
+      via_pinky:
+        what: via
+        where: 
+          ref: mirror_matrix_pinky_home
+        params:
+          net: "{{col_net}}"
+        adjust:
+          shift: [7.085, 0.5Sy+1]
+      via_outer:
+        what: via
+        where: 
+          ref: mirror_matrix_outer_home
+        params:
+          net: "{{col_net}}"
+        adjust:
+          shift: [7.085, 0.5Sy+1]
+      mtg_hole1:
+        what: mountinghole
+        where:
+          ref: matrix_index_num
+          shift: [0.5Sx, -0.5Sy]
+      mtg_hole2:
+        what: mountinghole
+        where:
+          ref: matrix_outer_num
+          shift: [0.5Sx, -0.5Sy]
+      mtg_hole3:
+        what: mountinghole
+        where:
+          ref: matrix_outer_bottom
+          shift: [0.5Sx, 0.5Sy]
+      mtg_hole4:
+        what: mountinghole
+        where:
+          ref: matrix_index_bottom
+          shift: [0.5Sx, -0.5Sy]
+      mtg_hole5:
+        what: mountinghole
+        where:
+          ref: mirror_matrix_inner_bottom
+          shift: [-0.5Sx, -0.5Sy]          
+      mtg_hole6:
+        what: mountinghole
+        where:
+          ref: mirror_matrix_outer_bottom
+          shift: [0.5Sx, 0.5Sy]          
+      mtg_hole7:
+        what: mountinghole
+        where:
+          ref: mirror_matrix_outer_num
+          shift: [0.5Sx, -0.5Sy]
+      mtg_hole8:
+        what: mountinghole
+        where:
+          ref: mirror_matrix_inner_num
+          shift: [-0.5Sx, -0.5Sy]
