@@ -295,7 +295,7 @@ pcbs:
         params:
           net: "{{col_net}}"
         adjust:
-          shift: [-7.085, 0.5Sy+1]
+          shift: [-7.36, 8]
       via_index:
         what: via
         where: 
@@ -303,7 +303,7 @@ pcbs:
         params:
           net: "{{col_net}}"
         adjust:
-          shift: [-7.085, 0.5Sy+1]
+          shift: [-7.36, 8]
       via_middle:
         what: via
         where: 
@@ -311,7 +311,7 @@ pcbs:
         params:
           net: "{{col_net}}"
         adjust:
-          shift: [-7.085, 0.5Sy+1]
+          shift: [-7.36, 8]
       via_ring:
         what: via
         where: 
@@ -319,7 +319,7 @@ pcbs:
         params:
           net: "{{col_net}}"
         adjust:
-          shift: [7.085, 0.5Sy+1]
+          shift: [7.36, 8]
       via_pinky:
         what: via
         where: 
@@ -327,7 +327,7 @@ pcbs:
         params:
           net: "{{col_net}}"
         adjust:
-          shift: [7.085, 0.5Sy+1]
+          shift: [7.36, 8]
       via_outer:
         what: via
         where: 
@@ -335,7 +335,7 @@ pcbs:
         params:
           net: "{{col_net}}"
         adjust:
-          shift: [7.085, 0.5Sy+1]
+          shift: [7.36, 8]
       mtg_hole1:
         what: mountinghole
         where:
